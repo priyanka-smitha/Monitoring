@@ -12,8 +12,12 @@ var app = http.createServer(function (req, res) {
 
 function memoryLoad()
 {
-	// console.log( os.totalmem(), os.freemem() );
-	return 0;
+	//console.log( os.totalmem(), os.freemem() );
+	var totalMem = os.totalmem() - os.freemem();
+	var memPercent = ~~((totalMem/os.totalmem())* 100);
+	console.log("Memory",memPercent);
+	return memPercent;
+	//return 0;
 }
 
 // Create function to get CPU information
@@ -52,7 +56,11 @@ function cpuAverage()
 	var totalDifference = endMeasure.total - startMeasure.total;
  
 	//Calculate the average percentage CPU usage
-	return 0;
+	var loadDifference = (totalDifference - idleDifference) ;
+	var percentLoad = ~~((loadDifference/totalDifference)*100);
+	return percentLoad;
+	console.log("CPU Cycle",percentLoad);
+	//return 0;
 }
 
 function measureLatenancy(server)
@@ -61,11 +69,15 @@ function measureLatenancy(server)
 	{
 		url: 'http://localhost' + ":" + server.address().port,
 	};
+	var start = Date.now();
 	request(options, function (error, res, body) 
 	{
-		server.latency = undefined;
+		var end = Date.now();
+		
+		server.latency = end-start;
+		console.log(server.latency);
 	});
-
+	
 	return server.latency;
 }
 
@@ -122,7 +134,7 @@ setInterval( function ()
         name: "Your Computer", cpu: cpuAverage(), memoryLoad: memoryLoad(),
         nodes: calcuateColor()
    });
-
+	console.log(cpuAverage());
 }, 2000);
 
 app.listen(3000);
@@ -155,7 +167,8 @@ function createServer(port, fn)
 	// Response to http requests.
 	var server = http.createServer(function (req, res) {
       res.writeHead(200, { 'Content-Type': 'text/html' });
-
+		
+	
       fn();
 
       res.end();
