@@ -58,8 +58,9 @@ function cpuAverage()
 	//Calculate the average percentage CPU usage
 	var loadDifference = (totalDifference - idleDifference) ;
 	var percentLoad = ~~((loadDifference/totalDifference)*100);
-	return percentLoad;
 	console.log("CPU Cycle",percentLoad);
+	return percentLoad;
+	
 	//return 0;
 }
 
@@ -75,7 +76,7 @@ function measureLatenancy(server)
 		var end = Date.now();
 		
 		server.latency = end-start;
-		console.log(server.latency);
+		//console.log(server.latency);
 	});
 	
 	return server.latency;
@@ -134,7 +135,6 @@ setInterval( function ()
         name: "Your Computer", cpu: cpuAverage(), memoryLoad: memoryLoad(),
         nodes: calcuateColor()
    });
-	console.log(cpuAverage());
 }, 2000);
 
 app.listen(3000);
