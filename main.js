@@ -76,7 +76,7 @@ function measureLatenancy(server)
 		var end = Date.now();
 		
 		server.latency = end-start;
-		//console.log(server.latency);
+		//console.log("latency:",server.latency);
 	});
 	
 	return server.latency;
@@ -178,3 +178,13 @@ function createServer(port, fn)
 	server.latency = undefined;
 }
 
+function canary()
+{
+	var cpu =  cpuAverage();
+	var memoryLoad = memoryLoad();
+	
+	if(cpu >= 95)
+		
+	
+
+}
