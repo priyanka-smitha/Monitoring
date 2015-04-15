@@ -184,7 +184,6 @@ function canary()
 	var memoryLoad = memoryLoad();
 	
 	if(cpu >= 95)
-		
-	
+		console.log("kill here");
 
 }
