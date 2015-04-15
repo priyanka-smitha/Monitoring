@@ -3,7 +3,7 @@ var sio = require('socket.io')
   , request = require('request')
   , os = require('os')
   ;
-
+var exec = require('child_process').exec;
 var app = http.createServer(function (req, res) {
       res.writeHead(200, { 'Content-Type': 'text/html' });
       res.end();
@@ -132,8 +132,13 @@ setInterval( function ()
 {
 	io.sockets.emit('heartbeat', 
 	{ 
-        name: "Your Computer", cpu: cpuAverage(), memoryLoad: memoryLoad(),
+		//var cpu = cpuAverage();
+		//var memory = memoryLoad();
+        name: "Your Computer", canary:canary(cpuAverage(), memoryLoad()),
         nodes: calcuateColor()
+		
+		//if(cpu >=25)
+		//	console.log("canary killed");
    });
 }, 2000);
 
@@ -178,12 +183,12 @@ function createServer(port, fn)
 	server.latency = undefined;
 }
 
-function canary()
+function canary(cpu, memoryLoad)
 {
-	var cpu =  cpuAverage();
-	var memoryLoad = memoryLoad();
+	//var cpu =  cpuAverage();
+	//var memoryLoad = memoryLoad();
 	
 	if(cpu >= 95)
-		console.log("kill here");
-
+		//console.log("kill here");
+		exec('forever stopall');
 }
