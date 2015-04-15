@@ -3,10 +3,42 @@ var sio = require('socket.io')
   , request = require('request')
   , os = require('os')
   ;
+var http = require('http');
+var httpProxy = require('http-proxy');
 var exec = require('child_process').exec;
+
+var proxy = httpProxy.createServer();
+
+var TARGET;
+
+var PROD = 'http://52.6.22.174:5000';
+/*
+http.createServer(function (req, res) {
+  //
+  // On each request, get the first location from the list...
+  //
+ // var target = { target: addresses.shift() };
+
+  //
+  // ...then proxy to the server whose 'turn' it is...
+  //
+ // console.log('balancing request to: ', target);
+ 
+ TARGET = PROD;
+  proxy.web(req, res, TARGET);
+
+  //
+  // ...and then the server you just used becomes the last item in the list.
+  //
+//addresses.push(target.target);
+}).listen(8089);
+*/
 var app = http.createServer(function (req, res) {
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.end();
+	   
+     // res.writeHead(200, { 'Content-Type': 'text/html' });
+     // res.end();
+	 TARGET = PROD;
+	  proxy.web( req, res, {target: TARGET } );
     })
   , io = sio.listen(app);
 
@@ -141,7 +173,6 @@ setInterval( function ()
 		//	console.log("canary killed");
    });
 }, 2000);
-
 app.listen(3000);
 
 /// NODE SERVERS
@@ -172,11 +203,9 @@ function createServer(port, fn)
 	// Response to http requests.
 	var server = http.createServer(function (req, res) {
       res.writeHead(200, { 'Content-Type': 'text/html' });
-		
-	
       fn();
-
-      res.end();
+		
+     res.end();
    }).listen(port);
 	nodeServers.push( server );
 
