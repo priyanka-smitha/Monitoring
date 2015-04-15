@@ -140,8 +140,6 @@ setInterval( function ()
 {
 	io.sockets.emit('heartbeat', 
 	{ 
-		//var cpu = cpuAverage();
-		//var memory = memoryLoad();
         name: "Your Computer", canary:canary(cpuAverage(), memoryLoad()),
         nodes: calcuateColor()
 	
